@@ -68,9 +68,8 @@ include CMakeFiles/run.dir/progress.make
 
 CMakeFiles/run:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir="/home/baalaji/Downloads/JTAG /build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Running JTAG stream generator"
-	/usr/bin/cmake -E copy_if_different /home/baalaji/Downloads/JTAG\ /JTAG\ 16bit.txt /home/baalaji/Downloads/JTAG\ /build/JTAG\ 16bit.txt
-	/usr/bin/cmake -E remove -f /home/baalaji/Downloads/JTAG\ /build/jtag_output.txt
-	/usr/bin/vvp /home/baalaji/Downloads/JTAG\ /build/jtag_sim.vvp
+	cd "/home/baalaji/Downloads/JTAG " && /usr/bin/cmake -E remove -f /home/baalaji/Downloads/JTAG\ /jtag_output.txt
+	cd "/home/baalaji/Downloads/JTAG " && /usr/bin/vvp /home/baalaji/Downloads/JTAG\ /build/jtag_sim.vvp
 
 run: CMakeFiles/run
 run: CMakeFiles/run.dir/build.make

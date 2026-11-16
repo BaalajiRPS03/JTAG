@@ -1,3 +1,4 @@
+
 // ============================================================
 // jtag_stream_pkg.sv
 // JTAG Stream Generator
@@ -28,8 +29,9 @@ task read_instructions_from_file(
 
     string token;              // ADDED
     integer token_length;      // ADDED
-    integer validation_error;  // ADDED
+    integer validation_error; // ADDED
     integer token_number;      // ADDED
+    integer invalid_character; // ADDED
 
     begin
 
@@ -95,27 +97,57 @@ task read_instructions_from_file(
                     else begin  // ADDED
 
                         // ------------------------------------------------
-                        // Existing conversion logic
+                        // ADDED:
+                        // Check every character is either 0 or 1.
+                        // ASCII 48 = '0', ASCII 49 = '1'.
                         // ------------------------------------------------
 
-                        status = $sscanf(token, "%b", instruction);  // ADDED
+                        invalid_character = 0;
 
-                        if (status == 1) begin  // ADDED
+                        for (i = 0; i < token_length; i = i + 1) begin
 
-                            instructions[instruction_count] = instruction;
+                            if ((token[i] != 8'h30) &&
+                                (token[i] != 8'h31)) begin
 
-                            instruction_count = instruction_count + 1;
+                                $display(
+                                    "ERROR: Invalid character in input token %0d: %s",
+                                    token_number,
+                                    token
+                                );
+
+                                invalid_character = 1;
+                                validation_error = 1;
+
+                            end
 
                         end
-                        else begin  // ADDED
 
-                            $display(
-                                "ERROR: Invalid binary value at input %0d: %s",
-                                token_number,
-                                token
-                            );  // ADDED
+                        if (invalid_character == 0) begin
 
-                            validation_error = 1;  // ADDED
+                            // ------------------------------------------------
+                            // Existing conversion logic
+                            // ------------------------------------------------
+
+                            status = $sscanf(token, "%b", instruction);  // ADDED
+
+                            if (status == 1) begin  // ADDED
+
+                                instructions[instruction_count] = instruction;
+
+                                instruction_count = instruction_count + 1;
+
+                            end
+                            else begin  // ADDED
+
+                                $display(
+                                    "ERROR: Invalid binary value at input %0d: %s",
+                                    token_number,
+                                    token
+                                );  // ADDED
+
+                                validation_error = 1;  // ADDED
+
+                            end
 
                         end
 

@@ -54,26 +54,15 @@ add_custom_target(build_jtag ALL
 # =========================================================
 # RUN SIMULATION
 # =========================================================
-
 add_custom_target(run
-
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${SRC_DIR}/JTAG 16bit.txt"
-            "${BUILD_DIR}/JTAG 16bit.txt"
-
     COMMAND ${CMAKE_COMMAND} -E remove -f
-            "${BUILD_DIR}/jtag_output.txt"
-
+            "${SRC_DIR}/jtag_output.txt"
     COMMAND ${VVP_EXECUTABLE}
             "${BUILD_DIR}/jtag_sim.vvp"
-
     DEPENDS build_jtag
-
-    WORKING_DIRECTORY ${BUILD_DIR}
-
+    WORKING_DIRECTORY ${SRC_DIR}
     COMMENT "Running JTAG stream generator"
 )
-
 
 # =========================================================
 # BUILD + RUN
